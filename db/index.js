@@ -13,10 +13,14 @@ class DB {
       // id, first_name, last_name FROM employee TABLE AND department name from department TABLE AND SELECT salary FROM role TABLE
       // YOUR NEED TO USE LEFT JOINS TO JOIN THREE TABLES
       // TODO: YOUR CODE HERE
-
+      'SELECT e.id, e.first_name, e.last_name, role.title, department.name AS department, role.salary, e.manager_id AS manager FROM employee AS e LEFT JOIN role ON e.role_id = role.id LEFT JOIN department ON role.department_id = department.id;'
     );
   }
+/*
+SELECT CONCAT_WS(' ', e.first_name, e.last_name) AS manager FROM employee AS e;
 
+CONCAT_WS(" ", e.first_name, e.last_name) 
+*/
   // Find all employees except the given employee id
   findAllPossibleManagers(employeeId) {
     return this.connection.query(
