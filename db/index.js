@@ -9,10 +9,6 @@ class DB {
   // Find all employees, join with roles and departments to display their roles, salaries, departments, and managers
   findAllEmployees() {
     return this.connection.query(
-      // CREATE SELECT STATMENT WITH THE FOLLOWING COLUMNS FROM THREE TABLES.
-      // id, first_name, last_name FROM employee TABLE AND department name from department TABLE AND SELECT salary FROM role TABLE
-      // YOUR NEED TO USE LEFT JOINS TO JOIN THREE TABLES
-      // TODO: YOUR CODE HERE
       'SELECT e.id, e.first_name, e.last_name, role.title, department.name AS department, role.salary, e.manager_id AS manager FROM employee AS e LEFT JOIN role ON e.role_id = role.id LEFT JOIN department ON role.department_id = department.id;'
     );
   }
@@ -38,8 +34,8 @@ CONCAT_WS(" ", e.first_name, e.last_name)
   // Update the given employee's role
   updateEmployeeRole(employeeId, roleId) {
     return this.connection.query(
-      // TODO: YOUR CODE HERE
-
+      'UPDATE employee SET role_id = ? WHERE id = ?',
+      [employeeId, roleId]
     );
   }
 
@@ -54,22 +50,14 @@ CONCAT_WS(" ", e.first_name, e.last_name)
   // Find all roles, join with departments to display the department name
   findAllRoles() {
     return this.connection.query(
-      // SELECT THE FOLLOWING COLUMNS:
-      // id, title, salary FROM role TABLE AND department name FROM department TABLE
-      // YOU NEED TO USE LEFT JOIN TO JOIN role and department TABLES
-      // TODO: YOUR CODE HERE
-
+      'SELECT r.id, r.title, r.salary, d.name FROM role AS r LEFT JOIN department AS d ON r.department_id = d.id'
     );
   }
 
   // Create a new role
   createRole(role) {
-    return this.connection.query(
-      // TODO: YOUR CODE HERE
-
-      );
+    return this.connection.query('INSERT INTO role SET ?', role);
   }
-
 
   // Find all departments, join with employees and roles and sum up utilized department budget
   findAllDepartments() {
@@ -83,9 +71,7 @@ CONCAT_WS(" ", e.first_name, e.last_name)
 
   // Create a new department
   createDepartment(department) {
-    return this.connection.query(
-      // TODO: YOUR CODE HERE
-    );
+    return this.connection.query('INSERT INTO department SET ?', department);
   }
 
   // Find all employees in a given department, join with roles to display role titles
@@ -103,8 +89,7 @@ CONCAT_WS(" ", e.first_name, e.last_name)
   // Find all employees by manager, join with departments and roles to display titles and department names
   findAllEmployeesByManager(managerId) {
     return this.connection.query(
-      // TODO: YOUR CODE HERE
-
+      'SELECT CONCAT_WS(" ", e.first_name, e.last_name) AS manager, role.title, d.name AS department FROM employee AS e LEFT JOIN role ON e.id = role.id LEFT JOIN department AS d ON e.id = d.id WHERE e.manager_id = ?', managerId
     );
   }
 }
