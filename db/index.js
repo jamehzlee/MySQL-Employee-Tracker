@@ -9,14 +9,13 @@ class DB {
   // Find all employees, join with roles and departments to display their roles, salaries, departments, and managers
   findAllEmployees() {
     return this.connection.query(
-      'SELECT e.id, e.first_name, e.last_name, role.title, department.name AS department, role.salary, e.manager_id AS manager FROM employee AS e LEFT JOIN role ON e.role_id = role.id LEFT JOIN department ON role.department_id = department.id;'
+      'SELECT e.id, e.first_name, e.last_name, role.title, d.name AS department, role.salary, CONCAT_WS(" ", manager.first_name, manager.last_name) AS manager FROM employee AS e \
+      LEFT JOIN role ON e.role_id = role.id \
+      LEFT JOIN department AS d ON role.department_id = d.id \
+      LEFT JOIN employee manager ON manager.id = e.manager_id'
     );
   }
-/*
-SELECT CONCAT_WS(' ', e.first_name, e.last_name) AS manager FROM employee AS e;
 
-CONCAT_WS(" ", e.first_name, e.last_name) 
-*/
   // Find all employees except the given employee id
   findAllPossibleManagers(employeeId) {
     return this.connection.query(
@@ -35,7 +34,7 @@ CONCAT_WS(" ", e.first_name, e.last_name)
   updateEmployeeRole(employeeId, roleId) {
     return this.connection.query(
       'UPDATE employee SET role_id = ? WHERE id = ?',
-      [employeeId, roleId]
+      [roleId, employeeId]
     );
   }
 
